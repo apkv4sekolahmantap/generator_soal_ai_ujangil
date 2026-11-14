@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generator Soal AI Ujangil</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('tema');t=t?JSON.parse(t):'dark';document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark')}catch(e){}</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="noRun" style="font:16px/1.5 Arial,sans-serif;background:#FFF3CD;color:#000;border:2px solid #E0A800;padding:16px;margin:0 0 12px"><b>⚠ File ini tidak bisa dibuka langsung dengan klik dua kali.</b><br>Aplikasi ini berjalan di Google Apps Script. Tempel keempat file (Kode.gs, Index.html, Stylesheet.html, JavaScript.html) ke proyek Apps Script, jalankan <code>setupAppEnvironment()</code>, lalu <b>Deploy → New deployment → Web app</b> dan buka alamat <code>…/exec</code>. Untuk sekadar melihat tampilannya, buka <b>Pratinjau-Offline.html</b>.</div>
+<!-- ═══ LANDING (publik) ═══ -->
+<div id="landing">
+<header class="top"><div class="wrap">
+ <a class="brand" href="javascript:void(0)" onclick="showHome('hero')"><span class="logo">AI</span><span>Generator Soal AI<small>Ujangil Platform</small></span></a>
+ <nav class="menu" aria-label="Menu utama">
+  <a class="on" href="javascript:void(0)" onclick="showHome('hero')">Beranda</a>
+  <a href="javascript:void(0)" onclick="showHome('fitur')">Fitur &amp; Taksonomi</a>
+  <a href="javascript:void(0)" onclick="showHome('cara')">Panduan Guru</a>
+  <a href="javascript:void(0)" onclick="openReg()">Daftarkan Sekolah</a>
+  <a href="javascript:void(0)" onclick="openLogin()">Masuk</a>
+  <button class="btn btn-gold" style="min-height:44px;padding:0 24px" onclick="openLogin()">Buka Aplikasi</button>
+  <button class="iconbtn" onclick="toggleTema()" aria-label="Ganti tema terang/gelap" title="Ganti tema">◐</button>
+ </nav>
+ <button class="burger" aria-label="Buka menu" onclick="document.getElementById('mnav').classList.toggle('hide')">☰</button>
+</div>
+<div id="mnav" class="hide">
+ <a href="javascript:void(0)" onclick="showHome('hero')">Beranda</a><a href="javascript:void(0)" onclick="showHome('fitur')">Fitur &amp; Taksonomi</a>
+ <a href="javascript:void(0)" onclick="showHome('cara')">Panduan Guru</a><a href="javascript:void(0)" onclick="openReg()">Daftarkan Sekolah</a><a href="javascript:void(0)" onclick="toggleTema()">◐ Ganti tema</a>
+ <button class="btn btn-gold" onclick="openLogin()">Masuk / Mulai</button>
+</div></header>
+
+<div id="home">
+<main>
+<section id="hero" class="wrap hero">
+ <div>
+  <div class="eyebrow" id="lp-eyebrow">Satu guru, semua soal, seketika</div>
+  <h1 class="disp" id="lp-judul">Buat soal <em>lengkap</em> dalam <em>hitungan menit</em></h1>
+  <p id="lp-sub">Susun soal ujian berkualitas untuk semua jenjang dan jenis soal secara otomatis dengan AI. Dilengkapi Kop Identitas, Naskah Soal, Kunci Jawaban, Kartu Soal, dan Kisi-Kisi sesuai standar administrasi sekolah.</p>
+  <div class="cta"><button class="btn btn-gold" onclick="openLogin()">Mulai Buat Soal</button><button class="btn btn-ghost" onclick="showHome('contoh')">Lihat Contoh Hasil</button></div>
+  <p style="margin-top:1rem;font-size:13px">Kurikulum Merdeka · Fase A–F (Kelas 1–12) · 7 bentuk soal · Level kognitif C1–C6</p>
+ </div>
+ <div class="pv" aria-label="Pratinjau hasil">
+  <div class="kop"><b>KOP ASESMEN</b><div style="font-weight:800;margin:4px 0 8px">ULANGAN SUMATIF AKHIR SEMESTER</div>
+   1. Pada rantai makanan padi → tikus → ular → elang, apa yang terjadi pada populasi tikus jika ular berkurang drastis?
+   <div class="opt"><div>A. Menurun</div><div class="k">B. Meningkat</div><div>C. Tetap</div><div>D. Punah</div></div></div>
+  <div class="rail" tabindex="0"><div><b>Kartu Soal</b>Indikator &amp; kunci</div><div><b>Kisi-Kisi</b>Level C1–C6</div><div><b>Kunci</b>Pembahasan</div><div><b>Naskah</b>Siap cetak</div></div>
+ </div>
+</section>
+
+<div class="wrap"><div class="kpis" aria-label="Statistik platform">
+ <div><b id="st-soal">–</b><span>Butir soal tersimpan</span></div><div><b id="st-guru">–</b><span>Guru terdaftar</span></div>
+ <div><b id="st-sek">–</b><span>Sekolah terdaftar</span></div><div><b>7</b><span>Bentuk soal didukung</span></div>
+</div></div>
+
+<section id="fitur" class="sec"><div class="wrap">
+ <div class="eyebrow">Fitur</div><h2>Fitur komprehensif sesuai Kurikulum Merdeka</h2><p class="lead">Bukan sekadar tanya-jawab. Mesin AI menyusun perangkat instrumen utuh yang siap diverifikasi pengawas dan kurikulum sekolah.</p>
+ <div class="grid c4 feat">
+  <div class="card"><div class="ic">🎓</div><h3>Semua jenjang &amp; kelas</h3><p>Fase A sampai F (SD hingga SMA/SMK), dengan saran mata pelajaran per jenjang.</p><small>Kelas 1–12</small></div>
+  <div class="card"><div class="ic">◎</div><h3>Level kognitif C1–C6</h3><p>Atur kesulitan dan komposisi LOTS/HOTS; kisi-kisi memuat level tiap butir.</p><small>Mudah · Sedang · Sulit</small></div>
+  <div class="card"><div class="ic">🖼</div><h3>Soal bergambar &amp; stimulus</h3><p>Stimulus teks, tabel, studi kasus, dan ilustrasi AI untuk soal yang membutuhkan gambar.</p><small>Dicek guru sebelum cetak</small></div>
+  <div class="card"><div class="ic">▤</div><h3>Perangkat lengkap</h3><p>Kop sekolah, naskah, kunci jawaban, kartu soal, dan kisi-kisi dalam PDF atau Word.</p><small>Kop &amp; logo per sekolah</small></div>
+ </div>
+</div></section>
+
+<section id="contoh" class="sec alt"><div class="wrap std">
+ <div>
+  <div class="eyebrow">Hasil cetak</div><h2>Format ulangan yang rapi dan seragam</h2><p class="lead">Kop dan identitas siswa mengikuti format lembar ulangan sekolah. Tiap sekolah memakai kop dan logonya sendiri.</p>
+  <ul><li>Kop surat: logo, instansi, nama sekolah, alamat, NPSN/Telp/Email</li><li>Judul ujian &amp; tahun ajaran otomatis sesuai semester</li><li>Identitas siswa + kotak Nilai, Ttd Guru, Ttd Wali Murid</li><li>Kunci jawaban, kartu soal, dan kisi-kisi dengan tanda tangan</li></ul>
+ </div>
+ <div class="paper" aria-label="Contoh lembar soal">
+  <div class="k1">PEMERINTAH KOTA TARAKAN<br>DINAS PENDIDIKAN<br>UPTD SD NEGERI 047 TARAKAN</div><div class="k2">Jl. Tanjung Pasir RT : 21 Kel. Mamburungan Kec. Tarakan Timur</div><div class="k2">NPSN: 30401671 Telp. 08125305093</div><hr>
+  <div class="jd">ULANGAN SUMATIF AKHIR SEMESTER GENAP<br>TAHUN AJARAN 2025/2026</div>
+  <div class="idr"><div>Nama : ..........<br>Kelas : 4 ( Empat ) .......<br>Mata Pelajaran : IPAS</div><div class="bx"><i>Nilai</i><i>Ttd Guru</i><i>Ttd Wali</i></div></div>
+  <div style="font-size:11px;margin-top:8px"><b>A.</b> Berilah tanda silang (x) pada jawaban yang paling benar !<br><b>1.</b> Hewan pemakan tumbuhan disebut …</div>
+ </div>
+</div></section>
+
+<section id="cara" class="sec"><div class="wrap">
+ <div class="eyebrow">Panduan guru</div><h2>4 langkah menyiapkan ujian sekolah</h2>
+ <div class="stp">
+  <div class="card"><div class="num">1</div><h3>Identitas &amp; kop</h3><p>Isi mata pelajaran, kelas, topik, dan data kop. Kop otomatis dari profil sekolah.</p></div>
+  <div class="card"><div class="num">2</div><h3>Parameter soal</h3><p>Pilih bentuk soal, tingkat kesulitan, level kognitif, dan jumlah butir.</p></div>
+  <div class="card"><div class="num">3</div><h3>Review hasil AI</h3><p>Periksa, edit, atau buat ulang gambar sebelum soal dicetak.</p></div>
+  <div class="card"><div class="num">4</div><h3>Cetak &amp; ekspor</h3><p>Unduh paket lengkap atau kisi-kisi dalam PDF/Word.</p></div>
+ </div>
+</div></section>
+
+<section id="faq" class="sec alt"><div class="wrap" style="max-width:860px">
+ <div class="eyebrow">FAQ</div><h2>Pertanyaan umum</h2>
+ <details><summary>Siapa yang bisa memakai aplikasi ini?</summary><p>Guru yang akunnya didaftarkan Admin sekolah. Sekolah yang belum terdaftar dapat mendaftar lewat tombol Daftarkan Sekolah; pendaftar menjadi Admin setelah disetujui.</p></details>
+ <details><summary>Apakah perlu API Key?</summary><p>Ya. Tiap pengguna menghubungkan API Key Gemini pribadinya (gratis dari Google AI Studio) di menu Pengaturan, sehingga kuota tidak dibagi dengan sekolah lain.</p></details>
+ <details><summary>Apakah data sekolah lain terlihat?</summary><p>Tidak. Soal dan kop dipisahkan per sekolah. Guru hanya melihat soalnya sendiri dan soal yang dibagikan di sekolahnya.</p></details>
+ <details><summary>Apakah soal bisa diedit dan dicetak ke Word?</summary><p>Bisa. Setiap butir dapat diedit, lalu diekspor sebagai PDF atau Word (.doc).</p></details>
+</div></section>
+
+<div class="wrap"><div class="ctab"><div><h2>Siap menyusun soal berkualitas?</h2><p>Daftarkan sekolah Anda atau masuk dengan akun guru yang sudah ada.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-gold" onclick="openReg()">Daftarkan Sekolah</button><button class="btn btn-ghost" onclick="openLogin()">Masuk</button></div></div></div>
+</main>
+<footer class="ft"><div class="wrap"><span><b>Ujangil Asesmen Platform</b> — pembuat soal HOTS &amp; kisi-kisi Kurikulum Merdeka berbantuan AI.</span><span>© 2026 Generator Soal AI Ujangil</span></div></footer>
+<div class="badge"><i></i>Sistem aktif</div>
+<button class="bubble" onclick="openLogin()" style="bottom:64px">Halo, mau buat soal apa hari ini?</button>
+</div>
+
+<!-- ═══ HALAMAN MASUK ═══ -->
+<div id="loginPg" class="hide"><div class="wrap">
+ <div class="lgst"><span class="eyebrow">Sistem asesmen cerdas guru · Kurikulum Merdeka</span></div>
+ <div class="lg">
+  <div class="lgcard">
+   <div style="text-align:center"><span class="logo" style="margin:0 auto 8px;width:56px;height:56px;font-size:20px">AI</span><div class="eyebrow" style="background:none;padding:0;justify-content:center">Edu-AI Ujangil · Portal Asesmen</div></div>
+   <h2>Masuk ke Workspace Pendidik</h2><p class="sub">Kelola bank soal berstandar HOTS, kisi-kisi, dan instrumen ujian berbasis taksonomi.</p>
+   <div class="tabs2" role="tablist" aria-label="Jenis akun"><button id="lgT1" class="on" role="tab" onclick="lgTab('guru')">Guru</button><button id="lgT2" role="tab" onclick="lgTab('adm')">Super Admin</button></div>
+   <label for="em">Username pengguna</label><input id="em" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="username Anda" onkeydown="if(event.key==='Enter')doLogin()">
+   <div id="pinBox" class="hide"><label for="lg_pin">PIN keamanan Super Admin (6 digit)</label><input id="lg_pin" class="pin" type="password" inputmode="numeric" maxlength="6" autocomplete="current-password" placeholder="••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="note"><span>🔒</span><span><b>Dilindungi PIN.</b> Maksimal 5 percobaan salah, setelah itu akun terkunci 15 menit.</span></div></div>
+   <div class="err" id="lerr" role="alert"></div>
+   <button class="btn btn-gold" style="width:100%;margin-top:8px" id="lbtn" onclick="doLogin()">Masuk</button>
+   <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="closeLogin()">Kembali ke beranda</button>
+  </div>
+  <div style="display:grid;gap:1rem">
+   <div class="card"><h3>Panduan akses &amp; bantuan</h3><p style="margin:6px 0 12px">Guru didaftarkan oleh Admin sekolah di menu Manajemen Pengguna. Sekolah baru dapat mendaftar sendiri; pendaftar menjadi Admin setelah disetujui Superadmin.</p>
+    <div class="note"><span>🏫</span><span>Sekolah Anda belum terdaftar?</span></div>
+    <button class="btn btn-gold" style="width:100%;margin-top:10px" onclick="openReg()">Daftarkan sekolah</button></div>
+   <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><span class="sh" style="margin:0">Status server &amp; engine</span><span class="chip ok" id="srvChip">Memeriksa…</span></div>
+    <div class="srv"><div>Basis data soal<b id="srvDb">–</b></div><div>Ekspor PDF &amp; Word<b>Siap</b></div></div></div>
+  </div>
+ </div>
+</div></div>
+</div>
+
+<!-- ═══ MODAL DAFTARKAN SEKOLAH ═══ -->
+<div id="reg" class="modal hide" role="dialog" aria-modal="true" aria-label="Daftarkan sekolah">
+ <div class="box" style="max-width:480px;max-height:92vh;overflow:auto">
+  <h2 style="margin:0">Daftarkan sekolah</h2>
+  <p style="color:var(--mut);font-size:14px;line-height:21px">Pendaftar menjadi <b>Admin sekolah</b>: dapat menambah guru, mengisi kop surat &amp; logo sekolah. Data tiap sekolah terpisah.</p>
+  <div id="regForm">
+   <label for="r_sk">Nama sekolah</label><input id="r_sk" placeholder="Contoh: SD Negeri 047 Tarakan" autocomplete="organization">
+   <label for="r_kt">Kota / Kabupaten</label><input id="r_kt" placeholder="Contoh: Tarakan">
+   <label for="r_nm">Nama lengkap Anda</label><input id="r_nm" autocomplete="name">
+   <label for="r_un">Username (untuk masuk)</label><input id="r_un" autocapitalize="none" spellcheck="false" placeholder="huruf kecil, angka, titik, strip">
+   <label for="r_em">Email (opsional)</label><input id="r_em" type="email">
+   <div class="err" id="rerr" role="alert"></div>
+   <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-ws" onclick="closeReg()">Batal</button><button class="btn btn-gold" style="flex:1" id="rbtn" onclick="doReg()">Daftarkan</button></div>
+  </div>
+  <div id="regOk" class="hide" style="text-align:center"><p id="regMsg" style="line-height:22px"></p><button class="btn btn-gold" style="width:100%" onclick="closeReg();openLogin()">Ke halaman masuk</button></div>
+ </div>
+</div>
+
+<!-- ═══ APLIKASI (guru) — semua halaman dimuat sekali, pindah menu 0 ms ═══ -->
+<div id="app" class="hide">
+ <aside class="side" aria-label="Menu aplikasi">
+  <div class="brand"><span class="logo">AI</span><span>EDU-AI Ujangil<small id="sk">Assessment Studio</small></span></div>
+  <div class="sg">Workspace pendidik</div>
+  <button data-p="dash" onclick="nav('dash')">▦ Dashboard</button>
+  <button data-p="buat" onclick="nav('buat')">✦ Buat Soal AI</button>
+  <button data-p="bank" onclick="nav('bank')">▤ Bank Soal</button>
+  <button data-p="kisi" onclick="nav('kisi')">☰ Kisi-Kisi &amp; Kartu Soal</button>
+  <button class="adm hide" data-p="profil" onclick="nav('profil')">🎓 Profil Sekolah</button>
+  <button data-p="pengaturan" onclick="nav('pengaturan')">⚙ Pengaturan</button>
+  <div class="sg adm hide">Administrasi</div>
+  <button class="adm hide" data-p="admin" onclick="nav('admin')">👥 Manajemen Pengguna</button>
+  <button class="adm hide" data-p="log" onclick="nav('log')">≣ Log Aktivitas</button>
+  <button onclick="keluar()" style="margin-top:10px">⇥ Keluar</button>
+  <div class="mdl"><div style="display:flex;justify-content:space-between"><span>Model LLM</span><span id="mdlSt" style="color:var(--ok);font-weight:700">Siap</span></div><b id="mdlNm">Gemini (otomatis)</b><div class="meter"><i id="qbar"></i></div><span id="qtxt">Kuota hari ini</span></div>
+ </aside>
+ <div class="tb">
+  <input id="cari" placeholder="Cari materi, mapel, atau teks soal…" aria-label="Cari" oninput="debounceCari()">
+  <span class="pkt"><i id="pktDot"></i>Paket aktif: <b id="pktTx">Gemini</b></span>
+  <button class="iconbtn" onclick="toggleTema()" aria-label="Ganti tema" title="Ganti tema">◐</button>
+  <button class="btn btn-ws kbtn" id="kbtn" onclick="nav('pengaturan')" aria-label="API Key Gemini">🔑 <span id="ktxt">API Key</span></button>
+  <div class="usr"><b id="nm"></b><span id="rl"></span></div>
+ </div>
+ <div class="main">
+  <section id="pg-dash" class="pg on">
+   <div class="hd"><div><span class="chip ok">WORKSPACE PENDIDIK</span><span class="chip" id="dSek"></span><h2>Ringkasan Bank Soal &amp; Aktivitas Asesmen</h2><p>Kelola perangkat evaluasi, analisis level kognitif taksonomi Bloom, dan pantau kesiapan naskah ujian.</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="chip" id="dSem" style="padding:10px 16px;font-size:12px"></span><button class="btn btn-gold" onclick="nav('buat')">✦ Susun Soal AI</button></div></div>
+   <div id="keyAlert" class="alert hide"><div><b>Konfigurasi API Key diperlukan</b><br><span>Hubungkan API Key Gemini Anda agar bisa membuat soal.</span></div><button class="btn btn-gold mini" onclick="nav('pengaturan')">Aktivasi API Key</button></div>
+   <div id="pinAlert" class="alert hide"><div><b>PIN keamanan Super Admin belum diatur</b><br><span>Jalankan setupAppEnvironment() atau atur PIN di menu Pengaturan.</span></div><button class="btn btn-gold mini" onclick="nav('pengaturan')">Atur PIN</button></div>
+   <div class="stats">
+    <div class="card stat"><span>Total bank soal</span><b id="s1">0</b><small id="s1b">Tersimpan di Bank Soal</small></div>
+    <div class="card stat"><span>Soal HOTS (C4–C6)</span><b id="s2">0</b><div class="meter"><i id="s2m"></i></div><small id="s2b"></small></div>
+    <div class="card stat"><span>Soal dibuat hari ini</span><b id="s4">0</b><div class="meter"><i id="s4m"></i></div><small id="s4b"></small></div>
+    <div class="card stat"><span>Status mesin AI</span><b id="s5" style="font-size:22px">–</b><small id="s5b"></small></div>
+   </div>
+   <div class="banner"><div><h3>Ingin membuat paket soal ujian baru?</h3><p>Isi identitas dan parameter; AI menyusun butir soal, kunci jawaban, kisi-kisi, dan kartu soal.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="nav('buat')">⚡ Buat Soal Instan</button><button class="btn l" onclick="nav('bank')">Buka Bank Soal</button></div></div>
+   <div class="two">
+    <div class="card"><h3 style="margin:0">Distribusi soal per level Bloom</h3><p style="margin:2px 0 0">Target proporsi HOTS (C4–C6) minimal 40%.</p><div class="bloom" id="bloom"></div></div>
+    <div class="card"><h3 style="margin:0">Komposisi tingkat kesulitan</h3><p style="margin:2px 0 12px">Rasio standar asesmen nasional (30 : 50 : 20).</p><div class="donutw"><div class="donut" id="donut"><div><span><b id="dTot">0</b>Total soal</span></div></div><div class="lgd" id="dLgd"></div></div></div>
+   </div>
+   <div class="two">
+    <div class="card"><h3 style="margin:0 0 12px">Soal per mata pelajaran</h3><div class="bars" id="mapelBars"></div></div>
+    <div class="card"><h3 style="margin:0">Tren pembuatan soal</h3><p style="margin:2px 0 8px">6 bulan terakhir</p><div id="trend"></div></div>
+   </div>
+   <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><h3 style="margin:0">Soal terbaru</h3><button class="btn btn-ws mini" onclick="nav('bank')">Lihat semua</button></div><div class="tw" style="margin-top:8px"><table class="t" id="recent"></table></div></div>
+  </section>
+
+  <section id="pg-bank" class="pg">
+   <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h2 style="margin:0">Bank Soal</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+     <button class="btn btn-ws" onclick="unduhExcel()">Unduh Excel</button>
+     <button class="btn btn-ws" onclick="hapusTerpilih()">Hapus</button>
+     <button class="btn btn-ws" id="bkisi" onclick="bukaKisi()">Kisi-Kisi (0)</button>
+     <button class="btn btn-ws" id="bword" onclick="dokumen('paket','word')">Word (0)</button>
+     <button class="btn btn-navy" id="bpdf" onclick="dokumen('paket','pdf')">Cetak PDF (0)</button>
+    </div>
+   </div>
+   <div class="filters">
+    <input id="fq" placeholder="Filter kata kunci" aria-label="Filter kata kunci" oninput="debounceCari()">
+    <select id="fj" aria-label="Jenjang" onchange="renderBank()"><option value="">Semua jenjang</option></select>
+    <select id="fm" aria-label="Mapel" onchange="renderBank()"><option value="">Semua mapel</option></select>
+    <select id="fb" aria-label="Bentuk soal" onchange="renderBank()"><option value="">Semua bentuk</option></select>
+    <select id="fk" aria-label="Level" onchange="renderBank()"><option value="">Semua level</option><option>C1</option><option>C2</option><option>C3</option><option>C4</option><option>C5</option><option>C6</option></select>
+   </div>
+   <div id="list"></div>
+  </section>
+
+  <section id="pg-buat" class="pg">
+   <div class="hd"><div><span class="chip hots">ASESMEN KURIKULUM MERDEKA</span><h2>Pembuat Instrumen &amp; Kisi-Kisi Soal Otomatis</h2><p>Ikuti empat tahap: identitas kop, parameter soal, review hasil AI, lalu cetak.</p></div></div>
+   <div class="stepper" id="stepper" role="tablist" aria-label="Tahapan pembuatan soal">
+    <button data-s="1" class="on" onclick="goStep(1)"><i>1</i><span>Identitas Kop<small>Mapel, kelas, topik</small></span></button>
+    <button data-s="2" onclick="goStep(2)"><i>2</i><span>Parameter Soal<small>Bentuk, level, jumlah</small></span></button>
+    <button data-s="3" onclick="goStep(3)"><i>3</i><span>Review AI<small>Periksa &amp; edit</small></span></button>
+    <button data-s="4" onclick="goStep(4)"><i>4</i><span>Cetak / Ekspor<small>PDF &amp; Word</small></span></button>
+   </div>
+   <div class="stbar"><i id="stbar"></i></div>
+   <div id="st1" class="stc"><div class="card"><h3 class="sh">1. Identitas ujian &amp; kop</h3>
+    <div class="fg">
+     <div class="w2"><label for="gm">Mata pelajaran</label><input id="gm" placeholder="Contoh: Biologi, Geografi…"></div>
+     <div><label for="gf">Fase</label><select id="gf" onchange="setKelas()"></select></div>
+     <div><label for="gk">Kelas</label><select id="gk"></select></div>
+     <div><label for="gs">Semester</label><select id="gs"><option>1 (Ganjil)</option><option>2 (Genap)</option></select></div>
+     <div class="w4"><label for="gt">Topik / materi ujian / lingkup materi</label><input id="gt" placeholder="Contoh: Sistem Pencernaan, Tata Surya, Bilangan Bulat…"></div>
+     <div class="w2"><label for="gcp">Capaian Pembelajaran (CP) — opsional</label><textarea id="gcp" rows="3" placeholder="Deskripsi CP…"></textarea></div>
+     <div class="w2"><label for="gatp">Alur Tujuan Pembelajaran (ATP) — opsional</label><textarea id="gatp" rows="3" placeholder="Deskripsi ATP/TP…"></textarea></div>
+    </div>
+    <details class="kop"><summary>Lengkapi data kop "Kartu Soal &amp; Penyebaran"</summary>
+     <div class="fg">
+      <div class="w2"><label for="kp_sek">Nama sekolah pada kop (kosong = dari Profil Sekolah)</label><input id="kp_sek"></div>
+      <div class="w2"><label for="kp_judul">Judul ujian (kosong = otomatis sesuai semester)</label><input id="kp_judul" list="judulList" placeholder="Ulangan Sumatif Akhir Semester Genap"><datalist id="judulList"><option value="Ulangan Harian"><option value="Penilaian Tengah Semester Ganjil"><option value="Penilaian Tengah Semester Genap"><option value="Ulangan Sumatif Akhir Semester Ganjil"><option value="Ulangan Sumatif Akhir Semester Genap"><option value="Penilaian Akhir Tahun"><option value="Asesmen Sumatif Lingkup Materi"><option value="Try Out"></datalist></div>
+      <div><label for="kp_tahun">Tahun ajaran (kosong = otomatis)</label><input id="kp_tahun" placeholder="2025/2026"></div>
+      <div><label for="kp_waktu">Alokasi waktu</label><input id="kp_waktu" placeholder="90 menit"></div>
+      <div class="w2"><label for="kp_guru">Nama guru</label><input id="kp_guru"></div>
+      <div><label for="kp_kota">Tempat (kota)</label><input id="kp_kota" placeholder="Nama kota"></div>
+      <div><label for="kp_tgl">Tanggal dokumen</label><input id="kp_tgl" type="date"></div>
+      <div class="w2"><label for="kp_wali">Nama wali kelas</label><input id="kp_wali"></div>
+      <div class="w2"><label for="kp_niwali">NIP wali kelas</label><input id="kp_niwali"></div>
+      <div class="w2"><label for="kp_ks">Nama kepala sekolah</label><input id="kp_ks"></div>
+      <div class="w2"><label for="kp_niks">NIP kepala sekolah</label><input id="kp_niks"></div>
+     </div>
+    </details>
+    </div><div class="stnav"><span></span><button class="btn btn-gold" onclick="goStep(2)">Lanjut: Parameter Soal →</button></div></div>
+   <div id="st2" class="stc hide">
+      <button class="banner2" onclick="bukaPanduan()">📖 Panduan Pengguna: Pelajari Cara Membuat Soal Lengkap dalam 3 Langkah <span class="chip hots" style="margin:0">Baca Tutorial</span></button>
+   <div class="card" id="paketCepat" style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px"><b>✦ Pilihan cepat paket soal ujian (1 klik siap pakai)</b><span style="font-size:12px;color:var(--mut)">Pilih paket otomatis atau susun kustom di bawah</span></div>
+    <div class="grid c4">
+     <button class="card" style="text-align:left;padding:14px" onclick="pasangPaket('std')"><b>⭐ Paket 25 Soal Standar</b> <span class="chip hots" style="float:right">Populer</span><br><small style="color:var(--mut)">20 Pilihan Ganda + 5 Uraian</small></button>
+     <button class="card" style="text-align:left;padding:14px" onclick="pasangPaket('pg25')"><b>⭐ Paket 25 PG Penuh</b> <span class="chip" style="float:right">25 Soal</span><br><small style="color:var(--mut)">25 soal Pilihan Ganda komprehensif</small></button>
+     <button class="card" style="text-align:left;padding:14px" onclick="pasangPaket('mix')"><b>⭐ Paket 25 Campuran</b> <span class="chip ok" style="float:right">Variatif</span><br><small style="color:var(--mut)">15 PG + 5 PG Kompleks + 5 Uraian</small></button>
+     <button class="card" style="text-align:left;padding:14px" onclick="pasangPaket('ring')"><b>⚡ Paket Ringkas 10 Soal</b> <span class="chip" style="float:right">10 Soal</span><br><small style="color:var(--mut)">10 soal PG untuk kuis harian</small></button>
+    </div></div>
+   <div class="tabs" role="tablist" aria-label="Mode pembuatan">
+    <button data-t="manual" class="on" role="tab" onclick="switchTab('manual')">📖 Reguler (Manual)</button>
+    <button data-t="osn" role="tab" onclick="switchTab('osn')">🏆 Soal OSN (Olimpiade) <span class="tg">OSN</span></button>
+    <button data-t="tka" role="tab" onclick="switchTab('tka')">🎯 Soal TKA (Akademik) <span class="tg">Kelas 6, 9, 12</span></button>
+    <button data-t="kisi" role="tab" onclick="switchTab('kisi')">📄 Dari Kisi-Kisi</button>
+    <button data-t="mentah" role="tab" onclick="switchTab('mentah')">✦ Dari Soal Mentah</button>
+   </div>
+   <div class="card hide" id="presetMode" style="margin-bottom:12px"></div>
+   <div id="tp-manual" class="tp two gen">
+    <div class="card" style="border-left:4px solid var(--gold)">
+     <h3 class="sh">+ Tambah bagian soal</h3>
+     <label>Bentuk soal</label><input type="hidden" id="mb" value="Pilihan Ganda"><div class="kg wrap" id="mbp" role="group" aria-label="Bentuk soal"></div>
+     <div id="xtra"></div>
+     <label class="row" style="margin-top:12px" for="mg">Gunakan AI Gambar<input type="checkbox" id="mg" style="margin-left:auto" onchange="gambarChg('mg','mgn')"></label>
+     <label class="row hide" id="mgnRow" for="mgn">Jumlah soal bergambar<input type="number" id="mgn" min="1" max="40" value="1" aria-label="Jumlah soal bergambar"></label>
+     <label>Distribusi kesulitan</label>
+     <label class="row" for="dc_Mudah"><input type="checkbox" id="dc_Mudah" onchange="distChg('Mudah')">Mudah<input type="number" id="dn_Mudah" min="1" max="40" value="3" class="hide" aria-label="Jumlah soal mudah"></label>
+     <label class="row" for="dc_Sedang"><input type="checkbox" id="dc_Sedang" onchange="distChg('Sedang')">Sedang<input type="number" id="dn_Sedang" min="1" max="40" value="3" class="hide" aria-label="Jumlah soal sedang"></label>
+     <label class="row" for="dc_Sulit"><input type="checkbox" id="dc_Sulit" onchange="distChg('Sulit')">Sulit<input type="number" id="dn_Sulit" min="1" max="40" value="3" class="hide" aria-label="Jumlah soal sulit"></label>
+     <label>Target kognitif <small style="color:var(--mut);font-weight:400">(kosong = AI menentukan)</small></label>
+     <div class="kg" id="mk"><button onclick="kogPick(this)">C1</button><button onclick="kogPick(this)">C2</button><button onclick="kogPick(this)">C3</button><button onclick="kogPick(this)">C4</button><button onclick="kogPick(this)">C5</button><button onclick="kogPick(this)">C6</button></div>
+     <button class="btn btn-navy" style="width:100%;margin-top:16px;min-height:48px" onclick="tambahBagian()">+ Tambah Bagian</button>
+    </div>
+    <div class="card">
+     <h3 class="sh">⚙ Struktur ujian <span id="tot" style="float:right;color:var(--mut)"></span></h3>
+     <div id="secs"></div>
+    </div>
+   </div>
+   <div id="tp-kisi" class="tp card hide">
+    <h3 class="sh">Dari kisi-kisi</h3>
+    <label for="kt">Satu indikator per baris. Opsional: <code>Indikator | C4 | Uraian</code> (maks 40 baris)</label>
+    <textarea id="kt" rows="8" placeholder="Menganalisis rantai makanan pada ekosistem hutan | C4&#10;Menjelaskan fungsi produsen | C2 | Pilihan Ganda"></textarea>
+    <div class="fg"><div class="w2"><label for="kb">Bentuk soal bawaan</label><select id="kb"></select></div><div class="w2"><label for="ko">Jumlah opsi</label><select id="ko"><option>3</option><option>4</option><option selected>5</option></select></div></div>
+    <label class="row" style="margin-top:12px" for="kg2">Gunakan AI Gambar<input type="checkbox" id="kg2" style="margin-left:auto" onchange="gambarChg('kg2','kgn')"></label>
+     <label class="row hide" id="kgnRow" for="kgn">Jumlah soal bergambar<input type="number" id="kgn" min="1" max="40" value="1" aria-label="Jumlah soal bergambar"></label>
+   </div>
+   <div id="tp-mentah" class="tp card hide">
+    <h3 class="sh">Dari soal mentah</h3>
+    <label for="mt">Tempel soal apa adanya. Pisahkan antar soal dengan satu baris kosong. AI merapikan, melengkapi opsi, kunci, dan level.</label>
+    <textarea id="mt" rows="10" placeholder="Apa fungsi klorofil pada daun?&#10;&#10;Sebutkan 2 contoh produsen di hutan hujan."></textarea>
+    <div class="fg"><div class="w2"><label for="mb2">Bentuk soal</label><select id="mb2"></select></div><div class="w2"><label for="mo2">Jumlah opsi</label><select id="mo2"><option>3</option><option>4</option><option selected>5</option></select></div></div>
+    <label class="row" style="margin-top:12px" for="mg2">Gunakan AI Gambar<input type="checkbox" id="mg2" style="margin-left:auto" onchange="gambarChg('mg2','mgn2')"></label>
+     <label class="row hide" id="mgn2Row" for="mgn2">Jumlah soal bergambar<input type="number" id="mgn2" min="1" max="40" value="1" aria-label="Jumlah soal bergambar"></label>
+   </div>
+      <div class="card" style="margin-top:14px;border-color:rgba(16,185,129,.45);background:rgba(16,185,129,.07)"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="chip ok">METODE TANPA API KEY</span><b>Gratis lewat AI pilihan Anda</b></div>
+    <p style="margin:8px 0 12px">Salin prompt ke <b>Claude, ChatGPT, Gemini, atau DeepSeek</b>, lalu tempelkan kembali JSON hasilnya ke aplikasi ini.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-gold" style="flex:2 1 260px;background:var(--ok);color:#fff" onclick="bukaPrompt()">📋 Salin Prompt untuk Claude / ChatGPT / Gemini</button><button class="btn btn-ws" style="flex:1 1 200px" onclick="bukaTempel()">📥 Tempel Hasil JSON AI</button></div></div>
+   <div class="note" style="justify-content:center;margin:12px 0 4px"><span>⚡</span><span><b>Atau generate langsung di aplikasi</b> (memerlukan API Key)</span></div>
+   <div class="prog hide" id="gprog" style="margin:16px 0 4px"><i></i></div>
+   <div id="gstat" style="font-size:13px;color:var(--mut);min-height:18px" role="status"></div>
+   <div class="err" id="gerr" role="alert"></div>
+   <button class="btn btn-ind" id="gbtn" onclick="generateAll()" style="margin-top:8px">✦ Generate Soal Sekarang</button>
+    <div class="stnav"><button class="btn btn-ws" onclick="goStep(1)">← Identitas Kop</button><span></span></div></div>
+   <div id="st3" class="stc hide"><div class="card" style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><div><h3 class="sh" style="margin:0">3. Review hasil AI</h3><span id="revInfo" style="font-size:13px;color:var(--mut)">Belum ada soal dibuat pada sesi ini.</span></div><div style="display:flex;gap:8px"><button class="btn btn-ws mini" onclick="goStep(2)">← Parameter</button><button class="btn btn-gold mini" onclick="goStep(4)">Lanjut: Cetak →</button></div></div></div><div id="rev"></div></div>
+   <div id="st4" class="stc hide"><div class="card"><h3 class="sh">4. Cetak / ekspor</h3><p id="cetakInfo" style="margin-bottom:12px">Pilih soal di Bank Soal atau buat soal baru terlebih dahulu.</p>
+    <div class="filters" style="grid-template-columns:1fr 1fr"><button class="btn btn-gold" onclick="dokumen('paket','pdf',cetakIds())">Paket Lengkap PDF</button><button class="btn btn-navy" onclick="dokumen('paket','word',cetakIds())">Paket Lengkap Word</button><button class="btn btn-ws" onclick="dokumen('kisi','pdf',cetakIds())">Kisi-Kisi PDF</button><button class="btn btn-ws" onclick="dokumen('kisi','word',cetakIds())">Kisi-Kisi Word</button></div>
+    <button class="btn btn-ws" style="width:100%" onclick="showKisi(cetakIds())">Lihat Kisi-Kisi &amp; Kartu Soal</button></div>
+    <div class="stnav"><button class="btn btn-ws" onclick="goStep(3)">← Review AI</button><span></span></div></div>
+  </section>
+
+  <section id="pg-kisi" class="pg">
+   <div class="hd"><div><span class="chip hots">KISI-KISI &amp; KARTU SOAL</span><h2>Kisi-Kisi Penulisan Soal</h2><p>Kop dan tanda tangan (tempat, tanggal, wali kelas, kepala sekolah) diambil dari data kop di tahap 1 Buat Soal AI.</p></div></div>
+   <div class="card"><h3 style="margin:0 0 8px">Daftar butir <span id="ktot" style="font-size:14px;color:var(--mut)"></span></h3><div class="tw"><table class="t" id="ktbl"><tr><td style="padding:16px;color:var(--mut)">Pilih soal di Bank Soal lalu tekan tombol Kisi-Kisi, atau buat soal baru.</td></tr></table></div>
+    <div class="filters" style="grid-template-columns:1fr 1fr;margin-top:12px"><button class="btn btn-navy" onclick="dokumen('kisi','pdf',G.kisiIds)">Kisi-Kisi PDF</button><button class="btn btn-ws" onclick="dokumen('kisi','word',G.kisiIds)">Kisi-Kisi Word</button><button class="btn btn-ws" onclick="dokumen('paket','pdf',G.kisiIds)">Paket Lengkap PDF</button><button class="btn btn-ws" onclick="dokumen('paket','word',G.kisiIds)">Paket Lengkap Word</button></div></div>
+  </section>
+
+  <section id="pg-profil" class="pg">
+   <div class="hd"><div><span class="chip hots">PROFIL SEKOLAH</span><h2>Identitas Sekolah &amp; Kop Surat</h2><p>Dipakai otomatis pada lembar soal, kunci jawaban, kartu soal, dan kisi-kisi.</p></div></div>
+   <div class="card" style="margin-top:12px"><h3 class="sh">Profil sekolah &amp; kop surat</h3>
+    <p style="color:var(--mut);font-size:13px;line-height:20px;margin:0 0 6px">Kop ini otomatis dipakai semua guru di sekolah ini pada lembar soal, kunci jawaban, kartu soal, dan kisi-kisi.</p>
+    <div class="fg">
+     <div class="w2"><label for="sk_nama">Nama sekolah (pengelompokan pengguna)</label><input id="sk_nama" list="sklist" onchange="loadSekolah()"><datalist id="sklist"></datalist></div>
+     <div class="w2"><label for="sk_nm">Nama sekolah pada kop</label><input id="sk_nm" placeholder="Contoh: UPTD SD NEGERI 047 TARAKAN"></div>
+     <div class="w2"><label for="sk_b1">Baris 1 (instansi, boleh kosong)</label><input id="sk_b1" placeholder="Contoh: PEMERINTAH KOTA TARAKAN"></div>
+     <div class="w2"><label for="sk_b2">Baris 2 (dinas/yayasan, boleh kosong)</label><input id="sk_b2" placeholder="Contoh: DINAS PENDIDIKAN"></div>
+     <div class="w4"><label for="sk_al">Alamat</label><input id="sk_al" placeholder="Contoh: Jl. Tanjung Pasir RT : 21 Kel. Mamburungan Kec. Tarakan Timur Kota Tarakan Prov. Kalimantan Utara"></div>
+     <div class="w4"><label for="sk_kt">NPSN / telepon / email</label><input id="sk_kt" placeholder="Contoh: NPSN: 30401671 Telp. 08125305093 Email: sdn047tarakan@yahoo.com"></div>
+     <div class="w2"><label for="sk_kota">Kota (tempat tanda tangan)</label><input id="sk_kota" placeholder="Contoh: Tarakan"></div>
+     <div class="w2"><label for="sk_ks">Nama kepala sekolah</label><input id="sk_ks"></div>
+     <div class="w2"><label for="sk_nip">NIP kepala sekolah</label><input id="sk_nip"></div>
+    </div>
+    <label for="sk_logo">Logo sekolah (PNG / JPG)</label>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><img id="sk_prev" alt="Pratinjau logo" class="hide" style="width:72px;height:72px;object-fit:contain;border:1px dashed var(--bd);border-radius:12px;background:#fff"><input id="sk_logo" type="file" accept="image/png,image/jpeg,image/webp" onchange="pilihLogo(this)" style="flex:1;min-width:200px"></div>
+    <div style="margin-top:14px;font-size:12px;color:var(--mut)">Pratinjau kop (seperti pada lembar soal)</div>
+    <div id="kopPrev" style="background:#fff;color:#000;border:1px solid var(--bd);border-radius:10px;padding:12px 14px;overflow:auto"></div>
+    <div class="err" id="skerr" role="alert"></div>
+    <button class="btn btn-gold" style="margin-top:12px" id="sksim" onclick="simpanSekolah()">Simpan Profil &amp; Kop</button>
+   </div>
+  </section>
+
+  <section id="pg-pengaturan" class="pg">
+   <div class="hd"><div><span class="chip hots">LANGKAH WAJIB SEBELUM MEMBUAT SOAL</span><h2>Aktivasi API Key AI</h2><p>Setiap guru menghubungkan API Key pribadi agar kuota dan privasi naskah soal berada di bawah kendali Anda.</p></div></div>
+   <div class="two set">
+    <div class="card">
+     <div class="sh">Penyedia kecerdasan buatan</div>
+     <div class="prov"><div class="ic">✦</div><div style="flex:1"><h4>Google Gemini AI <span class="chip hots" style="margin-left:6px">Direkomendasikan</span></h4><p>Model dipilih otomatis dari daftar milik API Key Anda. Kuota gratis tersedia dari Google AI Studio.</p></div></div>
+     <label for="kin" style="margin-top:18px">Masukkan API Key Gemini Anda</label>
+     <div class="keyin"><span>🔑</span><input id="kin" type="password" autocomplete="off" spellcheck="false" placeholder="Tempel API Key di sini" onkeydown="if(event.key==='Enter')simpanKey()"><button class="btn btn-ws mini" type="button" onclick="tampilKey()" id="ktmp">Tampilkan</button><button class="btn btn-ws mini" type="button" onclick="tempelKey()">Tempel</button></div>
+     <div class="stbox" id="kstBox"><i></i><div><b id="kst">Belum ada API Key</b><small id="kst2">Tempel kunci lalu tekan Simpan &amp; Uji.</small></div></div>
+     <div class="err" id="kerr" role="alert"></div>
+     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><button class="btn btn-ws" id="kuji" onclick="ujiKey()">Uji Ulang Koneksi</button><button class="btn btn-ws" id="khap" onclick="hapusKey()">Hapus Key</button><button class="btn btn-gold" style="flex:1" id="ksim" onclick="simpanKey()">Simpan &amp; Uji</button></div>
+    </div>
+    <div style="display:grid;gap:16px;align-content:start">
+     <div class="card"><h3 style="margin:0 0 12px">Cara cepat ambil API Key gratis</h3>
+      <ol class="steps"><li><span><b>Buka Google AI Studio</b>Akses <a class="lk" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> dengan akun Google Anda.</span></li><li><span><b>Buat API Key</b>Klik “Create API key”, pilih atau buat project.</span></li><li><span><b>Salin &amp; tempel</b>Salin kunci, tempelkan di kolom sebelah kiri, lalu simpan.</span></li></ol></div>
+     <div class="card"><h3 style="margin:0 0 6px;color:var(--ok)">Privasi &amp; keamanan kunci</h3><p>API Key disimpan di Script Properties proyek Apps Script dan tidak pernah dikirim kembali ke browser (hanya 4 karakter terakhir yang ditampilkan). Pemilik proyek Apps Script secara teknis dapat melihat Script Properties, jadi gunakan kunci khusus aplikasi ini.</p></div>
+     <div class="card"><details style="margin:0 0 8px"><summary>Berapa biaya API Key Google Gemini?</summary><p>Google AI Studio menyediakan paket gratis dengan batas permintaan per menit dan per hari yang dapat berubah. Periksa ketentuan terbaru di situs Google.</p></details><details style="margin:0 0 8px"><summary>Bagaimana jika kuota habis atau error?</summary><p>Aplikasi mencoba model lain secara otomatis. Jika tetap gagal, tunggu beberapa menit atau pakai API Key lain.</p></details><details style="margin:0"><summary>Apakah soal yang saya buat aman?</summary><p>Soal disimpan di spreadsheet sekolah Anda dan hanya terlihat oleh pembuat serta Admin sekolahnya.</p></details></div>
+    </div>
+   </div>
+   <div class="two" style="margin-top:16px">
+    <div class="card"><div class="sh">Tampilan</div><p style="margin-bottom:10px">Pilih tema antarmuka. Pilihan tersimpan di perangkat ini.</p><div class="seg" id="temaSeg"><button data-v="dark" onclick="setTema('dark')">Gelap</button><button data-v="light" onclick="setTema('light')">Terang</button></div></div>
+    <div class="card hide" id="cardPin"><div class="sh">PIN keamanan Super Admin</div><p style="margin-bottom:6px">Wajib saat Super Admin masuk. 6 digit angka.</p><label for="pin_new">PIN baru</label><input id="pin_new" type="password" inputmode="numeric" maxlength="6" placeholder="••••••" autocomplete="new-password"><button class="btn btn-gold" style="margin-top:12px" onclick="simpanPin()">Simpan PIN</button></div>
+   </div>
+   <div class="card" id="cardLanding" style="margin-top:16px"><h3 class="sh">Teks halaman depan</h3>
+    <label for="l_eb">Teks pembuka kecil</label><input id="l_eb">
+    <label for="l_jd">Judul (bungkus kata sorot dengan **bintang**)</label><input id="l_jd">
+    <label for="l_sb">Subjudul</label><textarea id="l_sb" rows="3"></textarea>
+    <button class="btn btn-gold" style="margin-top:16px" onclick="simpanLanding()">Simpan Halaman Depan</button></div>
+    <div class="card hide" id="cardLogo" style="margin-top:16px"><h3 class="sh">Logo / foto aplikasi</h3>
+     <p style="font-size:13px;color:var(--mut);margin:0 0 12px">Menggantikan kotak “AI” di sudut kiri atas (halaman depan, halaman masuk, dan menu aplikasi). Foto langsung tersimpan. Anda juga bisa klik logo di menu kiri.</p>
+     <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><span class="logo-pv" id="lg_pv">AI</span>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><label class="btn btn-gold" for="lg_ft" style="cursor:pointer;margin:0">Upload foto</label><button class="btn btn-ghost" type="button" onclick="hapusLogoApp()">Kembalikan ke tulisan AI</button></div></div>
+     <input id="lg_ft" type="file" accept="image/*" class="hide" onchange="pilihLogoApp(this)"></div>
+  </section>
+
+  <section id="pg-admin" class="pg">
+   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin:.25rem 0 12px"><h2 style="margin:0">Manajemen Pengguna</h2><button class="btn btn-navy" onclick="openUser()">+ Tambah Pengguna</button></div>
+   <div class="card"><div id="udb" style="font-size:12px;color:var(--mut);margin-bottom:8px"></div><div style="display:flex;gap:8px;align-items:center;margin-bottom:10px"><input id="ucari" placeholder="Cari pengguna…" aria-label="Cari pengguna" oninput="renderUsers()" style="flex:1"><span id="ucount" style="font-size:13px;color:var(--mut);white-space:nowrap"></span></div><div class="tw"><table class="t ut" id="utbl"></table></div></div>
+  </section>
+
+  <section id="pg-log" class="pg">
+   <div class="hd"><div><span class="chip hots">LOG AKTIVITAS</span><h2>Riwayat Pembuatan Soal</h2><p>200 aktivitas terbaru. Admin melihat sekolahnya; Superadmin melihat semua sekolah.</p></div><button class="btn btn-ws" onclick="loadLog()">Muat ulang</button></div>
+   <div class="card"><div class="tw"><table class="t" id="logtbl"><tr><td style="padding:16px;color:var(--mut)">Memuat…</td></tr></table></div></div>
+  </section>
+ </div>
+ <div class="foot"><span>Ujangil Assessment Intelligence System</span><span>Kurikulum Merdeka · Data tiap sekolah terpisah</span></div>
+ <nav class="bn" aria-label="Navigasi bawah">
+  <button data-p="dash" onclick="nav('dash')">▦<br>Ringkasan</button><button data-p="buat" onclick="nav('buat')">✦<br>Buat Soal</button><button data-p="bank" onclick="nav('bank')">▤<br>Bank Soal</button><button data-p="kisi" onclick="nav('kisi')">☰<br>Kisi-Kisi</button><button onclick="$('more').classList.remove('hide')">⋯<br>Lainnya</button>
+ </nav>
+</div>
+<div id="more" class="modal hide" role="dialog" aria-modal="true" aria-label="Menu lainnya"><div class="box" style="max-width:340px"><div style="display:grid;gap:8px">
+ <button class="btn btn-ws adm hide" onclick="$('more').classList.add('hide');nav('profil')">🎓 Profil Sekolah</button><button class="btn btn-ws" onclick="$('more').classList.add('hide');nav('pengaturan')">⚙ Pengaturan &amp; API Key</button>
+ <button class="btn btn-ws adm hide" onclick="$('more').classList.add('hide');nav('admin')">👥 Manajemen Pengguna</button><button class="btn btn-ws adm hide" onclick="$('more').classList.add('hide');nav('log')">≣ Log Aktivitas</button>
+ <button class="btn btn-ws" onclick="toggleTema()">◐ Ganti tema</button><button class="btn btn-ws" onclick="$('more').classList.add('hide');keluar()">⇥ Keluar</button><button class="btn btn-ghost" onclick="$('more').classList.add('hide')">Tutup</button></div></div></div>
+<div id="ubox" class="modal hide" role="dialog" aria-modal="true" aria-label="Pengguna"><div class="box">
+ <h2 style="margin:0" id="utitle">Tambah pengguna</h2>
+ <label for="u_un">Username</label><input id="u_un" autocapitalize="none" spellcheck="false">
+ <label for="u_nm">Nama</label><input id="u_nm">
+ <label for="u_em">Email (opsional)</label><input id="u_em" type="email">
+ <label for="u_sk">Sekolah</label><input id="u_sk" list="sklist2"><datalist id="sklist2"></datalist>
+ <label for="u_pr">Peran</label><select id="u_pr"></select>
+ <label for="u_st">Status</label><select id="u_st"><option>Aktif</option><option>Menunggu</option><option>Nonaktif</option></select>
+ <div class="err" id="uerr" role="alert"></div>
+ <div style="display:flex;gap:8px"><button class="btn btn-ws" onclick="$('ubox').classList.add('hide')">Batal</button><button class="btn btn-gold" style="flex:1" id="usim" onclick="simpanUser()">Simpan</button></div>
+</div></div>
+<div id="ebox" class="modal hide" role="dialog" aria-modal="true" aria-label="Edit soal"><div class="box" style="max-width:560px">
+ <h2 style="margin:0">Edit soal</h2>
+ <label for="e_tk">Teks soal</label><textarea id="e_tk" rows="4"></textarea>
+ <label for="e_op">Opsi / pasangan (satu per baris)</label><textarea id="e_op" rows="5"></textarea>
+ <label for="e_ku">Kunci</label><input id="e_ku">
+ <label for="e_pb">Pembahasan / rubrik</label><textarea id="e_pb" rows="3"></textarea>
+ <label for="e_tp">Topik</label><input id="e_tp">
+ <div class="filters" style="grid-template-columns:1fr 1fr"><div><label for="e_lv">Level</label><select id="e_lv"><option>C1</option><option>C2</option><option>C3</option><option>C4</option><option>C5</option><option>C6</option></select></div>
+ <div><label for="e_ks">Kesulitan</label><select id="e_ks"><option>Mudah</option><option>Sedang</option><option>Sulit</option></select></div></div>
+ <label class="row" for="e_db">Bagikan ke guru lain<input type="checkbox" id="e_db" style="margin-left:auto"></label>
+ <div class="err" id="eerr" role="alert"></div>
+ <div style="display:flex;gap:8px"><button class="btn btn-ws" onclick="$('ebox').classList.add('hide')">Batal</button><button class="btn btn-gold" style="flex:1" onclick="simpanEdit()">Simpan</button></div>
+</div></div>
+<div id="dbox" class="modal hide" role="dialog" aria-modal="true" aria-label="Dokumen siap"><div class="box" style="text-align:center">
+ <h2 style="margin:0">Dokumen siap</h2><p id="dnm" style="color:var(--mut);word-break:break-word"></p>
+ <button class="btn btn-gold" style="width:100%" onclick="unduhFile()">Unduh</button>
+ <button class="btn btn-ws" style="width:100%;margin-top:8px" onclick="$('dbox').classList.add('hide')">Tutup</button>
+</div></div>
+
+<!-- ═══ MODAL GENERATOR PROMPT & IMPOR JSON (tanpa API Key) ═══ -->
+<div id="gmod" class="modal hide" role="dialog" aria-modal="true" aria-label="Generator prompt dan impor JSON"><div class="box" style="max-width:840px;padding:0;position:relative">
+ <div class="gm-h"><div class="gm-ic">🤖</div><div style="flex:1;min-width:0"><h3 style="margin:0;font-size:20px">Generator Prompt &amp; Impor JSON (Tanpa API Key) <span class="chip ok" style="margin-left:6px">Gratis</span></h3><p id="gsum" style="margin:6px 0 0;font-size:13px;color:var(--mut);word-break:break-word"></p></div><button class="iconbtn" aria-label="Tutup" onclick="tutupGmod()">✕</button></div>
+ <div class="gm-b">
+  <section class="card" style="background:var(--in)">
+   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><b style="display:flex;gap:8px;align-items:center"><span class="num" style="margin:0;width:28px;height:28px;font-size:13px">1</span> BUKA PLATFORM AI PILIHAN ANDA &amp; TEMPEL PROMPT</b><button class="btn btn-ghost mini" id="pcopy" onclick="salinPrompt()">⧉ Salin Ulang Prompt</button></div>
+   <p style="margin:10px 0">Klik salah satu tombol AI di bawah. Prompt otomatis disalin dan tab baru terbuka; tempelkan (<b>Ctrl+V</b>) lalu tekan Enter.</p>
+   <div class="grid c4">
+    <a class="aibtn rec" href="https://claude.ai/new" target="_blank" rel="noopener" onclick="salinPrompt(true)">Claude AI ↗<small>Paling direkomendasikan</small></a>
+    <a class="aibtn" href="https://chatgpt.com/" target="_blank" rel="noopener" onclick="salinPrompt(true)">ChatGPT ↗<small>GPT-4o / Plus</small></a>
+    <a class="aibtn" href="https://gemini.google.com/app" target="_blank" rel="noopener" onclick="salinPrompt(true)">Gemini Web ↗<small>Google Gemini</small></a>
+    <a class="aibtn" href="https://chat.deepseek.com/" target="_blank" rel="noopener" onclick="salinPrompt(true)">DeepSeek ↗<small>DeepSeek R1 / V3</small></a>
+   </div>
+   <div id="pinfo" class="err" style="color:var(--ok)" role="status"></div>
+   <details style="margin:8px 0 0;background:transparent"><summary>Lihat / Edit Teks Prompt Lengkap</summary><textarea id="ptxt" rows="9" style="min-height:190px;margin-top:10px;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace" aria-label="Isi prompt (boleh diedit)"></textarea></details>
+  </section>
+  <section>
+   <b style="display:flex;gap:8px;align-items:center"><span class="num" style="margin:0;width:28px;height:28px;font-size:13px;background:var(--ok);color:#fff">2</span> TEMPELKAN (PASTE) BALASAN DARI AI DI SINI</b>
+   <p style="margin:8px 0;font-size:14px;color:var(--mut)">Salin seluruh teks atau blok kode JSON dari AI, lalu tempelkan di kotak berikut:</p>
+   <textarea id="jin" rows="9" style="min-height:200px;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace" placeholder='Tempelkan (Ctrl+V) jawaban atau kode JSON dari Claude / ChatGPT / Gemini di sini…&#10;Contoh:&#10;[ { "bentuk": "Pilihan Ganda", "teks": "…", "opsi": ["A. …", "B. …"], "kunci": "A", "level": "C3" } ]' aria-label="Balasan JSON dari AI"></textarea>
+   <div class="err" id="jerr" role="alert"></div>
+  </section>
+ </div>
+ <div class="gm-f"><small>Didukung pembersih markdown otomatis dan normalisasi format (nama kolom, level C1–C6, bentuk soal).</small><button class="btn btn-ws" onclick="tutupGmod()">Batal</button><button class="btn btn-gold" id="jbtn" onclick="imporJson()">🚀 Proses &amp; Terapkan Soal Sekarang</button></div>
+</div></div>
+<!-- ═══ MODAL BUKU PANDUAN & TUTORIAL ═══ -->
+<div id="gdmod" class="modal hide" role="dialog" aria-modal="true" aria-label="Buku panduan dan tutorial"><div class="box" style="max-width:900px;padding:0">
+ <div class="gd-h"><div><span class="chip" style="background:rgba(255,255,255,.18);color:#fff;border:0">PANDUAN RAMAH PEMULA</span><h3>Buku Panduan &amp; Tutorial Aplikasi Pembuat Soal AI</h3></div><div style="display:flex;gap:8px"><button class="btn btn-ghost mini" style="color:#fff;border-color:rgba(255,255,255,.5)" onclick="unduhPanduan()">⬇ Download Panduan Word (.doc)</button><button class="iconbtn" style="background:rgba(255,255,255,.18);color:#fff;border:0" aria-label="Tutup" onclick="$('gdmod').classList.add('hide')">✕</button></div></div>
+ <div class="gd-tabs" id="gdTabs" role="tablist"></div>
+ <div class="gd-body" id="gdBody"></div>
+ <div class="gd-f"><span style="font-size:13px;color:var(--mut)">Panduan Word bisa dibuka di Word, WPS, dan Google Docs.</span><div style="display:flex;gap:8px"><button class="btn btn-ws" onclick="unduhPanduan()">⬇ Download Buku Panduan (.doc)</button><button class="btn btn-gold" onclick="$('gdmod').classList.add('hide');nav('buat')">✓ Tutup &amp; Mulai Buat Soal</button></div></div>
+</div></div>
+<div id="bgs" class="badge hide" style="left:50%;transform:translateX(-50%);bottom:84px" role="status" aria-live="polite"></div>
+<div id="toast" class="toast hide" role="status"></div>
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
