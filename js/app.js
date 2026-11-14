@@ -549,8 +549,7 @@ async function simpanLanding() {
 }
 
 // ── Logo / foto aplikasi (menggantikan kotak "AI"; hanya Superadmin yang dapat mengganti) ──
-const LOGO_OK = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/;
-function paintLogo(o) { const d = o && o.logoApp, ada = !!d && LOGO_OK.test(d);
+function paintLogo(o) { const d = o && o.logoApp, ada = !!d && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(d);
   document.querySelectorAll('.logo').forEach(e => { e.style.backgroundImage = ada ? 'url(' + d + ')' : ''; e.dataset.t = e.dataset.t || e.textContent; e.textContent = ada ? '' : e.dataset.t; });
   const p = $('lg_pv'); if (p) { p.style.backgroundImage = ada ? 'url(' + d + ')' : ''; p.textContent = ada ? '' : 'AI'; } }
 document.addEventListener('click', e => { if (e.target.closest('.side .logo') && isSup()) $('lg_ft').click(); });
